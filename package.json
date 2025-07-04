@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.11",
+    "amqplib": "^0.10.8",
+    "react-browser-router": "^2.1.2",
+    "tailwindcss": "^4.1.11",
+    "vite": "^7.0.2"
+  }
+}

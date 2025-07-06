@@ -23,42 +23,81 @@ mongoose.connect(mongo_url).then(()=>{
 });
 
 
-app.post("/code", async(req, res) => {
+app.post("/api/auth/login", async (req, res) => {
   const { code } = req.body;
   if (!code) {
     return res.status(400).json({ error: "Code is required" });
   }
 
-  let bookmarkDoc= await Bookmark.findOne({code});
+  const allBookmarks = await Bookmark.find();
 
-  if(!bookmarkDoc){
-    bookmarkDoc=await Bookmark.create({code,bookmarks:[]})
+  let bookmarkDoc = null;
+  for (let doc of allBookmarks) {
+    const isMatch = await bcrypt.compare(code, doc.code);
+    if (isMatch) {
+      bookmarkDoc = doc;
+      break;
+    }
   }
 
-  res.json({ message: "Code received", code });
+  if (!bookmarkDoc) {
+    const hashedCode = await bcrypt.hash(code, 10);
+    bookmarkDoc = await Bookmark.create({
+      code: hashedCode,
+      bookmarks: []
+    });
+  }
+
+
+
+//token creation 
+const token = jwt.sign(
+  { bookmarkId: bookmarkDoc._id },
+  process.env.JWT_SECRET,
+  { expiresIn: "1d" }
+);
+ res.json({
+    token:`${token}`
+ })
+
 });
 
-app.get("/search",async (req, res) =>{
-    const {code} =req.body;
-    if(!code){
-        return res.json({
-            message:"code is required"
-        })
-    }
-    let bookmarkDoc=await Bookmark.findOne({code});
-    if(!bookmarkDoc){
-        res.status(404).json({
-            error:"code not found"
-        })
-    }
-    else{
-        res.json({
-            bookmarks:bookmarkDoc.bookmarks
-        })
-    }
-})
 
-app.post("/bookmarks", async (req, res) => {
+
+function authMiddleware(req, res, next) {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  const token = authHeader.split(" ")[1];
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.bookmarkId = decoded.bookmarkId;
+    next();
+  } catch (err) {
+    return res.status(403).json({ error: "Invalid or expired token" });
+  }
+}
+
+
+
+app.get("/api/bookmarks", authMiddleware, async (req, res) => {
+  try {
+    const bookmarkDoc = await Bookmark.findById(req.bookmarkId);
+
+    if (!bookmarkDoc) {
+      return res.status(404).json({ error: "Bookmark not found" });
+    }
+
+    res.json({ bookmarks: bookmarkDoc.bookmarks });
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+
+app.post("/api/bookmarks", async (req, res) => {
     const { code, title, url, tags } = req.body;
     if (!code || !title || !url) {
         return res.status(400).json({ error: "code,title,url are required" });

@@ -1,4 +1,4 @@
-const mongoose= require("mongoose")
+const mongoose = require("mongoose");
 
 const { Schema } = mongoose;
 
@@ -11,7 +11,6 @@ const individualBookmarkSchema = new Schema({
     type: String,
     required: true
   },
-  tags: [String],
   addedAt: {
     type: Date,
     default: Date.now
@@ -19,14 +18,18 @@ const individualBookmarkSchema = new Schema({
 });
 
 const bookmarkSchema = new Schema({
-  code: {
+  username: {
     type: String,
     required: true,
     unique: true
+  },
+  password: { 
+    type: String,
+    required: true
   },
   bookmarks: [individualBookmarkSchema]
 });
 
 const Bookmark = mongoose.model("Bookmark", bookmarkSchema);
 
-module.exports=Bookmark
+module.exports = Bookmark;

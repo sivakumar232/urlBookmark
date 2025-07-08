@@ -5,8 +5,8 @@ const jwt=require("jsonwebtoken");
 const mongoose=require("mongoose");
 const dotenv=require("dotenv").config();
 const Bookmark=require("./models/Bookmark");
-app.use(express.json());
 
+app.use(express.json());
 
 const mongo_url=process.env.MONGO_URL;
 const jwt_secret=process.env.JWT_SECRET;
@@ -22,45 +22,48 @@ mongoose.connect(mongo_url).then(()=>{
     console.log("error connecting to database",err);
 });
 
+const router = express.Router();
 
 app.post("/api/auth/login", async (req, res) => {
-  const { code } = req.body;
-  if (!code) {
-    return res.status(400).json({ error: "Code is required" });
+  const { username, password } = req.body;
+
+  if (!username || !password) {
+    return res.status(400).json({ error: "Username and password are required" });
   }
 
-  const allBookmarks = await Bookmark.find();
+  try {
+    let bookmarkDoc = await Bookmark.findOne({ username });
 
-  let bookmarkDoc = null;
-  for (let doc of allBookmarks) {
-    const isMatch = await bcrypt.compare(code, doc.code);
-    if (isMatch) {
-      bookmarkDoc = doc;
-      break;
+    // If user exists, verify password
+    if (bookmarkDoc) {
+      const isMatch = await bcrypt.compare(password, bookmarkDoc.password);
+      if (!isMatch) {
+        return res.status(401).json({ error: "Invalid credentials" });
+      }
+    } else {
+      // User doesn't exist, create new account
+      const hashedPassword = await bcrypt.hash(password, 10);
+      bookmarkDoc = await Bookmark.create({
+        username,
+        password: hashedPassword,
+        bookmarks: []
+      });
     }
+
+    const token = jwt.sign(
+      { bookmarkId: bookmarkDoc._id },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+
+    res.json({ token });
+
+  } catch (err) {
+    console.error("Login error:", err);
+    res.status(500).json({ error: "Server error" });
   }
-
-  if (!bookmarkDoc) {
-    const hashedCode = await bcrypt.hash(code, 10);
-    bookmarkDoc = await Bookmark.create({
-      code: hashedCode,
-      bookmarks: []
-    });
-  }
-
-
-
-//token creation 
-const token = jwt.sign(
-  { bookmarkId: bookmarkDoc._id },
-  process.env.JWT_SECRET,
-  { expiresIn: "1d" }
-);
- res.json({
-    token:`${token}`
- })
-
 });
+
 
 
 
@@ -81,41 +84,48 @@ function authMiddleware(req, res, next) {
 }
 
 
-
 app.get("/api/bookmarks", authMiddleware, async (req, res) => {
   try {
     const bookmarkDoc = await Bookmark.findById(req.bookmarkId);
-
     if (!bookmarkDoc) {
-      return res.status(404).json({ error: "Bookmark not found" });
+      return res.status(404).json({ error: "bookmark not found" });
     }
 
-    res.json({ bookmarks: bookmarkDoc.bookmarks });
+
+    res.json({
+      bookmarks: bookmarkDoc.bookmarks
+    })
   } catch (err) {
     res.status(500).json({ error: "Server error" });
   }
 });
 
+app.post("/api/bookmarks", authMiddleware, async (req, res) => {
+  const { title, url, tags } = req.body;
 
-app.post("/api/bookmarks", async (req, res) => {
-    const { code, title, url, tags } = req.body;
-    if (!code || !title || !url) {
-        return res.status(400).json({ error: "code,title,url are required" });
+  if (!title || !url) {
+    return res.status(400).json({ error: "title and url are required" });
+  }
+
+  try {
+    const bookmarkDoc = await Bookmark.findById(req.bookmarkId);
+    if (!bookmarkDoc) {
+      return res.status(404).json({ error: "User not found" });
     }
+
     const bookmark = { title, url, tags };
-    try {
-        const updatedBookmarks = await Bookmark.findOneAndUpdate(
-            { code },
-            { $push: { bookmarks: bookmark } },
-            { new: true }
-        );
-        (!updatedBookmarks)
-            ? res.status(404).json({ error: "code not found" })
-            : res.json(updatedBookmarks);
-    } catch (err) {
-        console.log("error adding bookmark", err);
-        res.status(500).json({ error: "internal server error" });
-    }
+
+    const updatedBookmarks = await Bookmark.findOneAndUpdate(
+      { _id: bookmarkDoc._id },
+      { $push: { bookmarks: bookmark } },
+      { new: true }
+    );
+
+    res.json(updatedBookmarks);
+  } catch (err) {
+    console.error("Error adding bookmark:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 

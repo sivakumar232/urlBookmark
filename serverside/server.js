@@ -5,6 +5,11 @@ const jwt=require("jsonwebtoken");
 const mongoose=require("mongoose");
 const dotenv=require("dotenv").config();
 const Bookmark=require("./models/Bookmark");
+const cors=require("cors");
+app.use(cors({
+  origin:"http://localhost:5173",
+  credentials:true
+}));
 
 app.use(express.json());
 
@@ -22,48 +27,69 @@ mongoose.connect(mongo_url).then(()=>{
     console.log("error connecting to database",err);
 });
 
+
 const router = express.Router();
 
-app.post("/api/auth/login", async (req, res) => {
-  const { username, password } = req.body;
+app.post("/api/auth/signup",async(req,res)=>{
+    try {
+    const { username, password } = req.body;
 
-  if (!username || !password) {
-    return res.status(400).json({ error: "Username and password are required" });
+    if (!username || !password) {
+      return res.status(400).json({ error: "Username and password required" });
+    }
+
+    const existingUser = await Bookmark.findOne({ username });
+    if (existingUser) {
+      return res.status(409).json({ error: "Username already exists" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await Bookmark.create({
+      username,
+      password: hashedPassword,
+      bookmarks: []
+    });
+
+    res.status(201).json({ message: "User registered successfully" });
+  } catch (err) {
+    console.error("Signup error:", err);
+    res.status(500).json({ error: "Server error" });
   }
 
-  try {
-    let bookmarkDoc = await Bookmark.findOne({ username });
+})
 
-    // If user exists, verify password
-    if (bookmarkDoc) {
-      const isMatch = await bcrypt.compare(password, bookmarkDoc.password);
-      if (!isMatch) {
-        return res.status(401).json({ error: "Invalid credentials" });
-      }
-    } else {
-      // User doesn't exist, create new account
-      const hashedPassword = await bcrypt.hash(password, 10);
-      bookmarkDoc = await Bookmark.create({
-        username,
-        password: hashedPassword,
-        bookmarks: []
-      });
+app.post("/api/auth/login", async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    console.log("Received login:", username);
+
+    if (!username || !password) {
+      return res.status(400).json({ error: "Username and password required" });
+    }
+
+   const bookmarkDoc = await Bookmark.findOne({ username });
+    if (!bookmarkDoc) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const isMatch = await bcrypt.compare(password, bookmarkDoc.password);
+    if (!isMatch) {
+      return res.status(401).json({ error: "Invalid credentials" });
     }
 
     const token = jwt.sign(
-      { bookmarkId: bookmarkDoc._id },
-      process.env.JWT_SECRET,
-      { expiresIn: "1d" }
+      { bookmarkId: bookmarkDoc._id, username: bookmarkDoc.username },
+      process.env.JWT_SECRET || "default_secret",  
+      { expiresIn: "7d" }
     );
 
-    res.json({ token });
+    res.cookie("token",token,{httpOnly:true,secure:true,sameSite:"none"}).json({message:"success",token:token});
 
   } catch (err) {
-    console.error("Login error:", err);
+    console.error("Login error:", err);  
     res.status(500).json({ error: "Server error" });
   }
 });
-
 
 
 
@@ -83,15 +109,14 @@ function authMiddleware(req, res, next) {
   }
 }
 
-
+  
 app.get("/api/bookmarks", authMiddleware, async (req, res) => {
   try {
     const bookmarkDoc = await Bookmark.findById(req.bookmarkId);
     if (!bookmarkDoc) {
       return res.status(404).json({ error: "bookmark not found" });
     }
-
-
+    
     res.json({
       bookmarks: bookmarkDoc.bookmarks
     })
@@ -127,7 +152,6 @@ app.post("/api/bookmarks", authMiddleware, async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
-
 
 
 const port=process.env.PORT || 3000

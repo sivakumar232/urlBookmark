@@ -5,7 +5,6 @@
     "bcrypt": "^6.0.0",
     "dotenv": "^17.0.1",
     "jsonwebtoken": "^9.0.2",
-    "react-browser-router": "^2.1.2",
     "tailwindcss": "^4.1.11",
     "vite": "^7.0.2"
   }

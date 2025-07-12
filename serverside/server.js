@@ -95,11 +95,10 @@ app.post("/api/auth/login", async (req, res) => {
 
 function authMiddleware(req, res, next) {
   const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+  if (!authHeader) {
     return res.status(401).json({ error: "Unauthorized" });
   }
 
-  const token = authHeader.split(" ")[1];
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.bookmarkId = decoded.bookmarkId;
@@ -109,7 +108,7 @@ function authMiddleware(req, res, next) {
   }
 }
 
-  
+
 app.get("/api/bookmarks", authMiddleware, async (req, res) => {
   try {
     const bookmarkDoc = await Bookmark.findById(req.bookmarkId);

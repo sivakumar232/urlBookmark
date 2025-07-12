@@ -4,18 +4,22 @@ import React from 'react'
 import Signup from './components/Signup'
 import Landingpage from './components/Landingpage'
 import Dashboard from './components/Dashboard'
-import {  Routes, Route } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
+import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
-
   return (
     <Routes>
-      <Route path='*'element={<h1>404 page not found</h1>}/>
-      <Route path='/'element={<Landingpage/>}/>
-      <Route path='/login'element={<Login/>}/>
-      <Route path='/signup'element={<Signup/>}/>
+
+      <Route path='/' element={<Landingpage />} />
+      <Route path='/login' element={<Login />} />
+      <Route path='/signup' element={<Signup />} />
+      <Route path='/dashboard' element={<ProtectedRoute>
+        <Dashboard />
+      </ProtectedRoute>}></Route>
+      <Route path='*' element={<h1>404 page not found</h1>} />
     </Routes>
   )
 }
 
-export default App
+export default App;

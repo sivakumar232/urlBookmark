@@ -6,7 +6,7 @@ import Landingpage from './components/Landingpage'
 import Dashboard from './components/Dashboard'
 import { Routes, Route } from 'react-router-dom'
 import ProtectedRoute from './components/ProtectedRoute'
-
+import Recent from './components/Recent'
 function App() {
   return (
     <Routes>
@@ -17,7 +17,12 @@ function App() {
       <Route path='/dashboard' element={<ProtectedRoute>
         <Dashboard />
       </ProtectedRoute>}></Route>
+            <Route path='/recent' element={<ProtectedRoute>
+        <Recent/>
+      </ProtectedRoute>}></Route>
+
       <Route path='*' element={<h1>404 page not found</h1>} />
+ 
     </Routes>
   )
 }

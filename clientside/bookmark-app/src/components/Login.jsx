@@ -49,7 +49,7 @@ useEffect(() => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-zinc-800 px-4">
   
-        <div className="max-w-md w-full bg-zinc-900  border border p-8 rounded-xl shadow-lg">
+        <div className="max-w-md w-full bg-zinc-900   p-8 rounded-xl shadow-lg">
           <h2 className="text-2xl font-bold text-center text-white mb-6">Login to Your Account</h2>
           <form onSubmit={handleLogin}  autoComplete="off"  className="space-y-5">
             <div>

@@ -28,7 +28,7 @@ const Sidebar = () => {
         className={`bg-white z-20 shadow-lg h-screen text-white w-64 min-h-screen p-6 space-y-4 fixed top-0 left-0 transform transition-transform duration-300
           ${open ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:static`}
       >
-        <h2 className="text-2xl text-black font-roboto font-semi  bold mb-6 flex space-x-4 font-raleway">< BookmarkIcon className='top-0.5 relative h-6 w-6'/>Bookmarks</h2>
+        <h2 className="text-xl text-black font-roboto font-semi  bold mb-6 flex space-x-4 font-raleway">< BookmarkIcon className=' relative h-6 w-6'/>Bookmarks</h2>
 
         {navItems.map((item) => (
           <Link

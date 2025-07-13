@@ -8,6 +8,11 @@ import Sidebar from './Sidebar'
 import Dashnav from './Dashnav'
 import { Star } from 'lucide-react'
 import { Ellipsis } from 'lucide-react'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 const items = [
   {
     id: 1,
@@ -83,19 +88,17 @@ const Dashboard = () => {
         Authorization: `Bearer ${token}`
       }
     })
-      .then((res) => setBookmarks(res.data))
+      .then((res) => setdata(res.data))
       .catch((err) => setError(err.response?.data?.error || "Error fetching data"));
   }, []);
   return (
     <div className='min-h-screen overflow-x-hidden'>
       <Sidebar />
       <Dashnav />
-
-
       <div className='ml-0 md:ml-64 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 flex gap-6 p-6 overflow-x-none'>
-        {items.map((items)=>(
+        {items.map((data)=>(
         <div className='p-6 border rounded  group shadow-md hover:scale-102 transition duration-300 border-black'>
-          <h2 className='text-xl text-bold font-ubuntu'>{items.title}</h2>
+          <h2 className='text-xl text-bold font-ubuntu'>{data.title}</h2>
           <div className='relative flex gap-3  opacity-0 group-hover:opacity-100 bottom-8 left-70'>
           <Star className={`h-4 ${items.favorite ?'text-yellow-400 fill-yellow-400 ':'text-gray-400'} w-4`}/>
           <Ellipsis className=' left-70 h-4  w-4'/>

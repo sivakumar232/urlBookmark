@@ -4,8 +4,7 @@ const { Schema } = mongoose;
 
 const individualBookmarkSchema = new Schema({
   title: {
-    type: String,
-    required: true
+    type: String
   },
   url: {
     type: String,

@@ -36,7 +36,7 @@ const Landingpage = () => {
             </Link>
           </div>
         </nav>
-
+        
         {/* Hero Section */}
         <div className="mt-20 text-center px-2  sm:px-4">
           <h1 className="text-3xl sm:text-5xl  md:text-6xl font-bold leading-tight font-poppins mb-6 text-black dark:text-white">

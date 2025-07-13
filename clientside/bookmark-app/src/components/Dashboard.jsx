@@ -86,7 +86,7 @@ const Dashboard = () => {
       .catch((err) => setError(err.response?.data?.error || "Error fetching data"));
   }, []);
   return (
-    <div className='min-h-screen'>
+    <div className='min-h-screen overflow-x-hidden'>
       <Sidebar />
       <Dashnav />
 
@@ -96,7 +96,7 @@ const Dashboard = () => {
         <div className='p-6 border rounded  group shadow-md hover:scale-102 transition duration-300 border-black'>
           <h2 className='text-xl text-bold font-ubuntu'>{items.title}</h2>
           <div className='relative flex gap-3  opacity-0 group-hover:opacity-100 bottom-8 left-70'>
-          <Star className='h-4 text-gray-400 w-4'/>
+          <Star className={`h-4 ${items.favorite ?'text-yellow-400 fill-yellow-400 ':'text-gray-400'} w-4`}/>
           <Ellipsis className=' left-70 h-4  w-4'/>
           </div>
           <a className='text-sm text-blue-900 relative bottom-5' href={items.url}>{items.url}</a>

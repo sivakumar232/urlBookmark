@@ -26,18 +26,7 @@ const Dashboard = () => {
   }, []);
   return (
     <div>
-{
-  data.map((item)=>{
-    return(
-      <div>
-        <h1>{item}</h1>
-        <h1>{item.title}</h1>
-        <p>{item.url}</p>
-        <p>{item.tags}</p>
-      </div>
-    )
-  })
-}
+      
     </div>
   )
 }

@@ -41,19 +41,19 @@ const Dashboard = () => {
       .catch((err) => setError(err.response?.data?.error || "Error fetching data"));
   }, []);
 //function to delete bookmark
-  const handledelete= async(id)=>{
-    try{
-   const res= await axios.delete(`http://localhost:3000/api/bookmarks/${id}`,{
-      header:{
-        Authorization:`Bearer ${localStorage.getItem("token")}`
-      }
-    })
+//   const handledelete= async(id)=>{
+//     try{
+//    const res= await axios.delete(`http://localhost:3000/api/bookmarks/${id}`,{
+//       headers:{
+//         Authorization:`Bearer ${localStorage.getItem("token")}`
+//       }
+//     })
 
-    Setbookmark((prev)=>prev.filter((b)=>b._id!=id));
-  }catch(err){
-    console.log(err);
-  }
-}
+//     Setbookmark((prev)=>prev.filter((b)=>b._id!=id));
+//   }catch(err){
+//     console.log(err);
+//   }
+// }
   return (
     <div className='min-h-screen overflow-x-hidden'>
       <Sidebar />
@@ -64,13 +64,13 @@ const Dashboard = () => {
           <h2 className='text-xl text-bold font-ubuntu'>{mark.title}</h2>
           <div className='relative flex gap-3  opacity-0 group-hover:opacity-100 bottom-8 left-80'>
           {/* <Star className={`h-4 ${mark.favorite ?'text-yellow-400 fill-yellow-400 ':'text-gray-400'} w-4`}/> */}
-          <Trash   className=' left-70 cursor-pointer h-4  w-4' onclick={handledelete((mark._id)) }/>
+          <Trash   className=' left-70 cursor-pointer h-4  w-4' />
           </div>
           <a className='text-sm text-blue-900 relative bottom-5' href={mark.url} target='_blank'>Link</a>
         </div>
       ))}
       </div>
-
+{/* onclick={handledelete((mark._id)) } */}
     </div>
   )
 }

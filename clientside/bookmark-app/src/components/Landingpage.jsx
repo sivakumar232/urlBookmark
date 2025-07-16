@@ -8,7 +8,6 @@ const Landingpage = () => {
 
   const handlemode = () => {
     Setdarkmode((prev) => !prev);
-    // Optional: Apply Tailwind dark class to root
     document.documentElement.classList.toggle('dark');
   };
 
@@ -43,7 +42,7 @@ const Landingpage = () => {
 
         {/* Hero Section */}
         <div className="mt-40 text-center px-2 space-y-5 sm:px-4">
-          <button className="bg-black text-white px-6 py-1 mx-auto rounded-full font-lato flex items-center transition duration-300">
+          <button className="bg-black dark:bg-gray-100 dark:text-black text-white px-6 py-1 mx-auto rounded-full font-lato flex items-center transition duration-300">
             <Zap className="h-4 w-4 mr-2" />
             Save Time & Stay Organized
           </button>
@@ -67,15 +66,15 @@ const Landingpage = () => {
 
         {/* Features Section */}
         <div className="text-center px-2 space-y-5 mb-10 sm:px-4">
-          <button className="bg-black text-white rounded-full mt-5 p-1 px-4">Features</button>
+          <button className="bg-black text-white dark:bg-gray-100 dark:text-black  rounded-full mt-5 p-1 px-4">Features</button>
           <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold leading-tight font-poppins mb-6 text-black dark:text-white">
             Everything you need to organize the web
           </h1>
           <p className="text-base sm:text-lg md:text-xl text-slate-600 dark:text-slate-300 font-raleway mb-8">
             Powerful features designed to make bookmark management effortless and efficient.
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 px-4 mb-10">
-            <div className="border px-6 py-4 h-[200px] space-y-3 rounded cursor-pointer shadow-md hover:scale-105 transition duration-300">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 px-4 mb-10">
+            <div className="border dark:shadow-[0px_0px_1px_rgba(204,_204,_204,_0.9),_0_0px_20px_rgba(204,_204,_204,_0.9)] 900 px-6 py-4 h-[200px] space-y-3 rounded cursor-pointer shadow-md hover:scale-105 transition duration-300">
               <h1 className="font-bold text-2xl font-montserrat text-left flex gap-4 items-center">
                 <Star /> Favorite Links
               </h1>
@@ -84,7 +83,7 @@ const Landingpage = () => {
                 dedicated favorites section.
               </p>
             </div>
-            <div className="border px-6 py-4 h-[200px] space-y-3 rounded cursor-pointer shadow-md hover:scale-105 transition duration-300">
+            <div className="border px-6 dark:shadow-[0px_0px_1px_rgba(204,_204,_204,_0.9),_0_0px_20px_rgba(204,_204,_204,_0.9)]  py-4 h-[200px] space-y-3 rounded cursor-pointer shadow-md hover:scale-105 transition duration-300">
               <h1 className="font-bold text-2xl font-montserrat flex items-center gap-4 text-left">
                 <ExternalLink /> Link Preview
               </h1>
@@ -93,7 +92,7 @@ const Landingpage = () => {
                 website titles, favicons, and descriptions.
               </p>
             </div>
-            <div className="border px-6 py-4 h-[200px] space-y-3 rounded cursor-pointer shadow-md hover:scale-105 transition duration-300">
+            <div className="border px-6 py-4 dark:shadow-[0px_0px_1px_rgba(204,_204,_204,_0.9),_0_0px_20px_rgba(204,_204,_204,_0.9)] h-[200px] space-y-3 rounded cursor-pointer shadow-md hover:scale-105 transition duration-300">
               <h1 className="font-bold text-2xl font-montserrat text-left flex items-center gap-4">
                 <MousePointerClick /> One-Click Save
               </h1>
@@ -114,7 +113,7 @@ const Landingpage = () => {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
             {/* Step 1 */}
             <div className="mt-5">
-              <button className="w-20 h-20 bg-black text-white rounded-full mb-4 mt-5">
+              <button className="w-20 h-20 bg-black text-white dark:bg-gray-100 dark:text-black rounded-full mb-4 mt-5">
                 <h1 className="text-2xl">1</h1>
               </button>
               <h1 className="text-2xl font-roboto font-bold mb-4">Install Extension</h1>
@@ -125,7 +124,7 @@ const Landingpage = () => {
 
             {/* Step 2 */}
             <div className="mt-5">
-              <button className="w-20 h-20 bg-black text-white rounded-full mb-4 mt-5">
+              <button className="w-20 h-20 bg-black text-white dark:bg-gray-100 dark:text-black rounded-full mb-4 mt-5">
                 <h1 className="text-2xl">2</h1>
               </button>
               <h1 className="text-2xl font-roboto font-bold mb-4">Save Bookmarks</h1>
@@ -136,7 +135,7 @@ const Landingpage = () => {
 
             {/* Step 3 */}
             <div className="mt-5">
-              <button className="w-20 h-20 bg-black text-white rounded-full mb-4 mt-5">
+              <button className="w-20 h-20 bg-black text-white dark:bg-gray-100 dark:text-black rounded-full mb-4 mt-5">
                 <h1 className="text-2xl">3</h1>
               </button>
               <h1 className="text-2xl font-roboto font-bold mb-4">Find & Organize</h1>

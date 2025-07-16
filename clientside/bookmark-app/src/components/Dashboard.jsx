@@ -60,7 +60,7 @@ const Dashboard = () => {
       <Dashnav />
       <div className='ml-0 md:ml-64 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 flex gap-6 p-6 overflow-x-none'>
         {Bookmark.map((mark)=>(
-        <div className='p-6 border rounded dark:bg-slate-900 dark:text-white group shadow-md hover:scale-102 transition duration-300 border-black'>
+        <div className='p-6 border dark:border-gray-600 rounded dark:bg-slate-900 dark:text-white group shadow-md hover:scale-102 transition duration-300 border-black'>
           <h2 className='text-xl text-bold font-ubuntu'>{mark.title}</h2>
           <div className='relative flex gap-3  opacity-0 group-hover:opacity-100 bottom-8 left-80'>
           {/* <Star className={`h-4 ${mark.favorite ?'text-yellow-400 fill-yellow-400 ':'text-gray-400'} w-4`}/> */}

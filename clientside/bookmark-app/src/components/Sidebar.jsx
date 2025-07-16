@@ -8,7 +8,7 @@ import { useTheme } from '@/context/Themecontext';
 const Sidebar = () => {
   const [open, setOpen] = useState(false);
   const location = useLocation();
-  const{darmode}=useTheme();
+  const{darkMode}=useTheme();
 
   const navItems = [
     { name: 'All Bookmarks', path: '/dashboard' },

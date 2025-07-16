@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 import { Switch } from '@/components/ui/switch';
 import { Zap, Star, ExternalLink, MousePointerClick } from 'lucide-react';
 import { useTheme } from '@/context/Themecontext';
-
+import { Sun,Moon } from 'lucide-react';
 const Landingpage = () => {
-  const {darkmode,toggleTheme}=useTheme();
+  const {darkMode,toggleTheme}=useTheme();
   return (
     <div className="relative min-h-screen bg-white dark:bg-black transition-colors duration-300">
       <div className="flex flex-col items-center justify-center min-h-screen px-4">
@@ -15,10 +15,7 @@ const Landingpage = () => {
           <div className="flex flex-wrap items-center gap-3 mt-3 sm:mt-0">
             {/* Dark Mode Toggle */}
             <div className="flex items-center gap-2 px-2">
-              <p className="text-sm sm:text-base text-black dark:text-white">
-                {darkmode ? 'Light mode' : 'Dark mode'}
-              </p>
-              <Switch onClick={toggleTheme} />
+              {darkMode ? <Sun onClick={toggleTheme}/> : <Moon onClick={toggleTheme}/> }
             </div>
 
             {/* Login & Signup */}

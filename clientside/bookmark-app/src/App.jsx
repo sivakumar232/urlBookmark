@@ -7,8 +7,10 @@ import Dashboard from './components/Dashboard'
 import { Routes, Route } from 'react-router-dom'
 import ProtectedRoute from './components/ProtectedRoute'
 import Recent from './components/Recent'
+import { ThemeProvider } from './context/Themecontext'
 function App() {
   return (
+    <ThemeProvider>
     <Routes>
 
       <Route path='/' element={<Landingpage />} />
@@ -24,6 +26,7 @@ function App() {
       <Route path='*' element={<h1>404 page not found</h1>} />
  
     </Routes>
+    </ThemeProvider>
   )
 }
 

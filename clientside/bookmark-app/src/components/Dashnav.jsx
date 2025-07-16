@@ -2,6 +2,8 @@ import axios from 'axios';
 import React from 'react';
 import { useState } from 'react';
 import { Plus } from 'lucide-react';
+import { useTheme } from '@/context/Themecontext';
+
 import {
     Dialog,
     DialogContent,
@@ -10,10 +12,12 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
+import { Switch } from '@/components/ui/switch';
 
 const Dashnav = () => {
     const [Title, Settitle] = useState('');
     const [Url, Seturl] = useState('');
+    const {darkmode,toggleTheme}=useTheme();
     const handlesubmit = async (e) => {
         if (e) {
             e.preventDefault();
@@ -21,25 +25,31 @@ const Dashnav = () => {
         }
         try {
             const res = await axios.post("http://localhost:3000/api/bookmarks", {
-                title:Title,url:Url
-            },{
+                title: Title, url: Url
+            }, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`
                 }
             }
-            
-        )
-        const message="Bookmark added successfully"
+
+            )
+            const message = "Bookmark added successfully"
         } catch (err) {
             console.log(err);
         }
     }
     return (
         <div>
-            <nav className='w-full shadow-md flex flex-wrap justify-end items-center border-b border-gray-300 px-4 sm:px-6 md:px-16 py-4 absolute top-0 z-10 bg-white'>
+            <nav className='w-full shadow-md flex dark:bg-black dark:text-white flex-wrap justify-end items-center border-b border-gray-300 px-4 sm:px-6 md:px-16 py-4 absolute top-0 z-10 bg-white'>
+                <div className="flex items-center gap-2 px-2">
+                    <p className="text-sm sm:text-base text-black dark:text-white">
+                        {darkmode ? 'Light mode' : 'Dark mode'}
+                    </p>
+                    <Switch onClick={toggleTheme} />
+                </div>
                 <Dialog>
                     <DialogTrigger asChild>
-                        <button className='bg-black text-white p-2 px-4 flex items-center gap-2 rounded hover:bg-zinc-900 transition'>
+                        <button className='bg-black text-white dark:text-black dark:bg-white p-2 px-4 flex items-center gap-2 rounded hover:bg-zinc-900 transition'>
                             <Plus size={18} /> Add Bookmark
                         </button>
                     </DialogTrigger>

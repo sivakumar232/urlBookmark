@@ -2,15 +2,10 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Switch } from '@/components/ui/switch';
 import { Zap, Star, ExternalLink, MousePointerClick } from 'lucide-react';
+import { useTheme } from '@/context/Themecontext';
 
 const Landingpage = () => {
-  const [Darkmode, Setdarkmode] = useState(false);
-
-  const handlemode = () => {
-    Setdarkmode((prev) => !prev);
-    document.documentElement.classList.toggle('dark');
-  };
-
+  const {darkmode,toggleTheme}=useTheme();
   return (
     <div className="relative min-h-screen bg-white dark:bg-black transition-colors duration-300">
       <div className="flex flex-col items-center justify-center min-h-screen px-4">
@@ -21,9 +16,9 @@ const Landingpage = () => {
             {/* Dark Mode Toggle */}
             <div className="flex items-center gap-2 px-2">
               <p className="text-sm sm:text-base text-black dark:text-white">
-                {Darkmode ? 'Light mode' : 'Dark mode'}
+                {darkmode ? 'Light mode' : 'Dark mode'}
               </p>
-              <Switch onClick={handlemode} />
+              <Switch onClick={toggleTheme} />
             </div>
 
             {/* Login & Signup */}

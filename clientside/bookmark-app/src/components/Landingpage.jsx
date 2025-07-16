@@ -54,7 +54,7 @@ const Landingpage = () => {
         </div>
 
         {/* Divider */}
-        <div className="my-20 w-full border-t" />
+        <div className="my-20 w-full " />
 
         {/* Features Section */}
         <div className="text-center px-2 space-y-5 mb-10 sm:px-4">
@@ -96,7 +96,7 @@ const Landingpage = () => {
           </div>
         </div>
 
-        <div className="my-20 w-full border-t" />
+        <div className="my-20 w-full " />
 
         <div className="text-center px-2 space-y-8 mb-40 sm:px-4">
           <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold leading-tight font-poppins mb-6 text-black dark:text-white">
@@ -139,7 +139,7 @@ const Landingpage = () => {
         </div>
 
         {/* Final Divider */}
-        <div className="my-20 w-full border-t" />
+        <div className="my-20 w-full " />
       </div>
     </div>
   );

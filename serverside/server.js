@@ -96,13 +96,11 @@ app.post("/api/auth/login", async (req, res) => {
 });
 
 
-//auth checking middleware
 function authMiddleware(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader) {
     return res.status(401).json({ error: "Unauthorized" });
   }
-
   const token = authHeader.split(" ")[1];
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -137,7 +135,7 @@ app.post("/api/bookmarks", authMiddleware, async (req, res) => {
 
   if ( !url) {
     return res.status(400).json({ error: "url is required" });
-  }
+  } 
 
   try {
     const bookmarkDoc = await Bookmark.findById(req.bookmarkId);
@@ -153,7 +151,10 @@ app.post("/api/bookmarks", authMiddleware, async (req, res) => {
       { new: true }
     );
 
-    res.json(updatedBookmarks);
+    // after inserting bookmark into DB:
+const latest = updatedBookmarks.bookmarks.at(-1);
+res.status(201).json({ bookmark: latest }); // ✅ only ONE bookmark object
+
   } catch (err) {
     console.error("Error adding bookmark:", err);
     res.status(500).json({ error: "Internal server error" });
@@ -166,13 +167,12 @@ app.delete("/api/bookmarks/:id", authMiddleware, async (req, res) => {
   const { id } = req.params;
 
   try {
-    const user = await Bookmark.findById(req.bookmarkId); // user is the document
+    const user = await Bookmark.findById(req.bookmarkId); 
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
-    // Remove the bookmark with the given _id from the user's bookmarks array
     user.bookmarks = user.bookmarks.filter(
       (bookmark) => bookmark._id.toString() !== id
     );

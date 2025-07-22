@@ -7,7 +7,6 @@ const BookmarkContext = createContext();
 export const BookmarkProvider = ({ children }) => {
   const [bookmarks, setBookmarks] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const fetchBookmarks = async () => {
     try {
       const res = await axios.get("http://localhost:3000/api/bookmarks", {
@@ -25,7 +24,7 @@ export const BookmarkProvider = ({ children }) => {
 
   useEffect(() => {
     fetchBookmarks();
-  }, []);
+  }, [localStorage.getItem("token")]);
 
   const addBookmark = (bookmark) => {
     setBookmarks(prev => [bookmark, ...prev]);

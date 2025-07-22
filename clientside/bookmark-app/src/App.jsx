@@ -9,9 +9,10 @@ import ProtectedRoute from './components/ProtectedRoute'
 import Recent from './components/Recent'
 import { ThemeProvider } from './context/Themecontext'
 import { BookmarkProvider } from './context/BookmarkContext';
-
+import { AuthProvider } from './context/AuthContext'
 function App() {
   return (
+    <AuthProvider>
     <ThemeProvider>
       <BookmarkProvider>
         <Routes>
@@ -23,15 +24,11 @@ function App() {
               <Dashboard />
             </ProtectedRoute>} 
           />
-          <Route path='/recent' element={
-            <ProtectedRoute>
-              <Recent />
-            </ProtectedRoute>} 
-          />
           <Route path='*' element={<h1>404 page not found</h1>} />
         </Routes>
       </BookmarkProvider>
     </ThemeProvider>
+    </AuthProvider>
   )
 }
 

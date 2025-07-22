@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { Plus, Sun, Moon } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { useTheme } from "@/context/Themecontext";
 import { useBookmarks } from "../context/BookmarkContext";
 import {
@@ -10,7 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from "@/components/ui/dialog";    
 
 const Dashnav = () => {
   const [Title, Settitle] = useState("");
@@ -29,8 +30,8 @@ const Dashnav = () => {
     });
     
     if (res.data?.bookmark) {
-      addBookmark(res.data.bookmark);   // ✅ update context
-      Settitle(""); Seturl("");         // ✅ reset form
+      addBookmark(res.data.bookmark);   
+      Settitle(""); Seturl("");         
     } else {
       console.warn("No bookmark returned.");
     }
@@ -39,8 +40,14 @@ const Dashnav = () => {
   }
   };
 
+const logout=()=>{
+  localStorage.removeItem("token");
+  window.location.href="/";
+}
+
+
   return (
-    <nav className="w-full shadow-md flex dark:bg-black dark:text-white justify-end items-center border-b dark:border-gray-600 px-6 py-4 absolute top-0 z-10 bg-white">
+    <nav className="w-full   flex dark:bg-black dark:text-white justify-end items-center border-b dark:border-gray-600 px-6 py-4 absolute top-0 z-10 bg-white">
       <div className="flex items-center gap-2 px-2">
         {darkMode ? <Sun onClick={toggleTheme} /> : <Moon onClick={toggleTheme} />}
       </div>
@@ -82,6 +89,8 @@ const Dashnav = () => {
           </form>
         </DialogContent>
       </Dialog>
+      <h1 className="text-black dark:text-white cursor-pointer font-semibold font-lato ml-4"   onClick={logout}>logout</h1>
+    
     </nav>
   );
 };

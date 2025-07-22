@@ -12,15 +12,13 @@ const Sidebar = () => {
 
   const navItems = [
     { name: 'All Bookmarks', path: '/dashboard' },
-    { name: 'Recent', path: '/recent' },
-    { name: 'Stared', path: '/Stared' },
     { name: 'Logout', path: '/logout' },
   ];
 
   return (
     <div className="flex  h-30 ">
       <button
-        className="md:hidden p-4 text-black z-50"
+        className="md:hidden dark:text-white p-4 text-black z-50"
         onClick={() => setOpen(!open)}
       >
         {open ? <X size={24} /> : <Menu size={24} />}
@@ -39,7 +37,7 @@ const Sidebar = () => {
             to={item.path}
             className={`block px-4 text-black py-2 dark:bg-black dark:text-white hover:bg-gray-100  rounded-lg  transition 
               ${location.pathname === item.path ? 'text-gray-900 bg-gray-100 border-l-3 dark:bg-slate-900 border-cyan-500 font-semibold' : ''}`}
-            onClick={() => setOpen(false)} // close on mobile click
+            onClick={() => setOpen(false)} 
           >
             {item.name}
           </Link> 

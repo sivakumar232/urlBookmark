@@ -187,7 +187,7 @@ app.delete("/api/bookmarks/:id", authMiddleware, async (req, res) => {
 });
 
 
-const port=process.env.PORT || 3000
-app.listen(port,()=>{
+const port=process.env.PORT || 4000
+app.listen(3000,()=>{
     console.log("listening on port 3000");
 })

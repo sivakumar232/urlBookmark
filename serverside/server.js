@@ -6,6 +6,7 @@ const mongoose=require("mongoose");
 const dotenv=require("dotenv").config();
 const Bookmark=require("./models/Bookmark");
 const cors=require("cors");
+const axios=require('axios');
 app.use(cors({
   origin:"http://localhost:5173",
   credentials:true
@@ -185,7 +186,38 @@ app.delete("/api/bookmarks/:id", authMiddleware, async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
+// fetch link preview securely from backend
+app.get("/api/preview", async (req, res) => {
+  const { url } = req.query;
 
+  if (!url) {
+    return res.status(400).json({ error: "URL is required" });
+  }
+
+  try {
+    console.log("🔍 Preview fetch requested for:", url);
+
+    const response = await axios.get(
+      `https://api.linkpreview.net/?key=a42db5156f0db2709c2cb0fe97b8b6e3&q=${encodeURIComponent(url)}`
+    );
+
+    console.log("Preview response:", response.data);
+
+    res.json(response.data);
+  } catch (err) {
+    console.error("Preview fetch error:", err.message);
+
+    if (err.response) {
+      console.error("LinkPreview API returned:", err.response.status, err.response.data);
+    } else if (err.request) {
+      console.error("No response from LinkPreview API:", err.request);
+    } else {
+      console.error("🔥 Unknown error:", err.message);
+    }
+
+    res.status(500).json({ error: "Failed to fetch preview" });
+  }
+});
 
 const port=process.env.PORT || 3000
 app.listen(port,()=>{

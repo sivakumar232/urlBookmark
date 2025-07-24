@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "name": "URL Bookmarker",
+  "version": "1.0",
+  "description": "Bookmark current tab with login.",
+  "permissions": ["activeTab", "scripting", "storage"],
+  "host_permissions": ["http://localhost:3000/*"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "icon.png"
+  }
+}

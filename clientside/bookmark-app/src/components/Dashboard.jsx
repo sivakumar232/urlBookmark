@@ -62,7 +62,7 @@ useEffect(() => {
               />
             </div>
             <a  
-              className='text-sm flex gap-2  dark:text-blue-900 relative bottom-5'
+              className='text-sm flex gap-2  dark:text-blue-800 relative bottom-5'
               href={mark.url}
               target='_blank'
               rel='noopener noreferrer'

@@ -129,22 +129,25 @@ app.get("/api/bookmarks", authMiddleware, async (req, res) => {
   }
 });
 
-
-//add bookmark
 app.post("/api/bookmarks", authMiddleware, async (req, res) => {
-  const { title, url } = req.body;
+  const { url } = req.body;
 
-  if ( !url) {
-    return res.status(400).json({ error: "url is required" });
-  } 
+  if (!url) return res.status(400).json({ error: "URL is required" });
 
   try {
     const bookmarkDoc = await Bookmark.findById(req.bookmarkId);
-    if (!bookmarkDoc) {
-      return res.status(404).json({ error: "User not found" });
-    }
+    if (!bookmarkDoc) return res.status(404).json({ error: "User not found" });
 
-    const bookmark = { title, url };
+    // 🎯 Fetch preview from Microlink
+    const previewRes = await axios.get(`https://api.microlink.io/?url=${encodeURIComponent(url)}`);
+    const preview = previewRes.data?.data || {};
+
+    const bookmark = {
+      title: preview.title || url,
+      url,
+      description: preview.description || '',
+      image: preview.image?.url || '',
+    };
 
     const updatedBookmarks = await Bookmark.findOneAndUpdate(
       { _id: bookmarkDoc._id },
@@ -152,17 +155,13 @@ app.post("/api/bookmarks", authMiddleware, async (req, res) => {
       { new: true }
     );
 
-    // after inserting bookmark into DB:
-const latest = updatedBookmarks.bookmarks.at(-1);
-res.status(201).json({ bookmark: latest }); // ✅ only ONE bookmark object
-
+    const latest = updatedBookmarks.bookmarks.at(-1);
+    res.status(201).json({ bookmark: latest });
   } catch (err) {
     console.error("Error adding bookmark:", err);
     res.status(500).json({ error: "Internal server error" });
   }
 });
-
-
 ///delete bookmark
 app.delete("/api/bookmarks/:id", authMiddleware, async (req, res) => {
   const { id } = req.params;
@@ -184,38 +183,6 @@ app.delete("/api/bookmarks/:id", authMiddleware, async (req, res) => {
   } catch (err) {
     console.error("Delete Error:", err);
     res.status(500).json({ error: "Internal server error" });
-  }
-});
-// fetch link preview securely from backend
-app.get("/api/preview", async (req, res) => {
-  const { url } = req.query;
-
-  if (!url) {
-    return res.status(400).json({ error: "URL is required" });
-  }
-
-  try {
-    console.log("🔍 Preview fetch requested for:", url);
-
-    const response = await axios.get(
-      `https://api.linkpreview.net/?key=a42db5156f0db2709c2cb0fe97b8b6e3&q=${encodeURIComponent(url)}`
-    );
-
-    console.log("Preview response:", response.data);
-
-    res.json(response.data);
-  } catch (err) {
-    console.error("Preview fetch error:", err.message);
-
-    if (err.response) {
-      console.error("LinkPreview API returned:", err.response.status, err.response.data);
-    } else if (err.request) {
-      console.error("No response from LinkPreview API:", err.request);
-    } else {
-      console.error("🔥 Unknown error:", err.message);
-    }
-
-    res.status(500).json({ error: "Failed to fetch preview" });
   }
 });
 

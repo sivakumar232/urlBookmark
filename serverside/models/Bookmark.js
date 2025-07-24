@@ -3,13 +3,13 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const individualBookmarkSchema = new Schema({
-  title: {
-    type: String
-  },
+  title: String,
   url: {
     type: String,
     required: true
   },
+  description: String,
+  image: String,
   addedAt: {
     type: Date,
     default: Date.now
